@@ -1,8 +1,8 @@
 const express = require('express')
-const mysql = require("mysql2")
+const mysql = require('mysql2')
 var bodyParser = require('body-parser')
 const dotenv = require('dotenv')
-const bcrypt = require("bcryptjs")
+const bcrypt = require('bcryptjs')
 var jsonParser = bodyParser.json()
 const app = express()
 
@@ -86,7 +86,7 @@ app.post("/auth/register", jsonParser, (req, res) => {
       let hashedPassword = await bcrypt.hash(password, 8)
      
       db.query('INSERT INTO users SET?', {name: name, email: email, password: hashedPassword}, (err, result) => {
-          if(error) {
+          if(err) {
             return res.send(500, { message : "Registeration unsuccessful!!!!!!"})
           } else {
             return res.send(200, { id: result.insertId, accessToken : hashedPassword})
