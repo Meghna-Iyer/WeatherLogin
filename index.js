@@ -8,7 +8,7 @@ const app = express()
 
 dotenv.config({ path: './.env'})
 
-const port = 3000
+const port = 4005
 
 const db = mysql.createConnection({
   host: process.env.DATABASE_HOST,
@@ -25,7 +25,7 @@ db.connect((error) => {
   }
 })
 
-app.post("/verifyUser", jsonParser, (req, res) => {  
+app.get("/verify_user", jsonParser, (req, res) => {
   const { accessToken } = req.body
 
   db.query('SELECT * FROM users WHERE password = ?', [accessToken], async (error, result) => {
@@ -38,11 +38,11 @@ app.post("/verifyUser", jsonParser, (req, res) => {
         return res.send(200, {message : "User verified"})
       } else {
         return res.send(403, { message : "Unauthenticated user"})
-      }       
+      }
   })
 })
 
-app.post("/auth/login", jsonParser, (req, res) => {  
+app.post("/auth/login", jsonParser, (req, res) => {
   const { email, password } = req.body
 
   db.query('SELECT id, password as hash_pwd FROM users WHERE email = ?', [email], async (error, result) => {
@@ -63,12 +63,12 @@ app.post("/auth/login", jsonParser, (req, res) => {
         return res.send(400, { message : "Invalid login creds"})
       } else {
         return res.send(400, { message : "Invalid login creds"})
-      }       
+      }
   })
 })
 
 
-app.post("/auth/register", jsonParser, (req, res) => {  
+app.post("/auth/register", jsonParser, (req, res) => {
   const { name, email, password, password_confirm } = req.body
 
   db.query('SELECT email FROM users WHERE email = ?', [email], async (error, result) => {
@@ -84,14 +84,14 @@ app.post("/auth/register", jsonParser, (req, res) => {
       }
 
       let hashedPassword = await bcrypt.hash(password, 8)
-     
+
       db.query('INSERT INTO users SET?', {name: name, email: email, password: hashedPassword}, (err, result) => {
           if(err) {
             return res.send(500, { message : "Registeration unsuccessful!!!!!!"})
           } else {
             return res.send(200, { id: result.insertId, accessToken : hashedPassword})
           }
-      })        
+      })
   })
 })
 
