@@ -82,6 +82,10 @@ app.post("/auth/register", jsonParser, (req, res) => {
   })
 })
 
+app.get('/', (req, res) => {
+  res.send('Weather Login microservice')
+})
+
 app.listen(port, () => {
   console.log(`Weather Login app listening on port ${port}`)
 })
