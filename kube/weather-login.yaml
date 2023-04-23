@@ -1,0 +1,32 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: weather-login
+spec:
+  selector:
+    app: weather-login
+  ports:
+    - port: 4005
+      targetPort: 4005
+  type: LoadBalancer
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: weather-login
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: weather-login
+  template:
+    metadata:
+      labels:
+        app: weather-login
+    spec:
+      containers:
+        - name: weather-login
+          image: meghnabits/weather-login:latest
+          ports:
+            - containerPort: 4005
+          imagePullPolicy: Always

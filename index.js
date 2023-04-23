@@ -9,7 +9,7 @@ const app = express()
 
 dotenv.config({ path: './.env'})
 
-const port = process.env.WEATHER_LOGIN_PORT
+const port = process.env.WEATHER_LOGIN_PORT_NUMBER
 
 app.get("/verify_user", jsonParser, (req, res) => {
   let accessToken = req.query['access_token'];
